@@ -5,6 +5,9 @@ from fastapi import FastAPI
 from lib.bike.bike import order_bike
 from lib.car.car import order_car
 from lib.scooter.scooter import order_scooter
+from typing import List
+from fastapi import Query
+from lib.vehicle.vehicle import sort_and_order
 
 pyroscope.configure(
 	application_name = "ride-sharing-app",
@@ -45,3 +48,8 @@ def environment():
     for key, value in os.environ.items():
         result +=f"<p>{key}={value}</p>"
     return result
+
+@app.get("/vehicles")
+def vehicles(isBig: bool, search_terms: List[str] = Query([])):
+    sorted_terms = sort_and_order(isBig, search_terms)
+    return sorted_terms

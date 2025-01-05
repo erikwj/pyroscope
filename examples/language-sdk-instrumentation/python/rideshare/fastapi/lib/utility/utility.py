@@ -2,6 +2,7 @@ import time
 import pyroscope
 import os
 from datetime import datetime
+import pandas as pd
 
 # How much time mutex_lock() takes relative to search_radius()
 MUTEX_LOCK_MULTIPLIER = 2
@@ -38,3 +39,19 @@ def find_nearest_vehicle(n, vehicle):
             i += 1
         if vehicle == "car":
             check_driver_availability(n)
+
+def group_and_count(df: pd.DataFrame, groupby_terms: list[str]) -> str:
+    """
+    Groups the DataFrame by the specified terms and counts the occurrences.
+
+    Parameters:
+    df (pd.DataFrame): The pandas DataFrame to be grouped.
+    groupby_terms (list): The list of column names to group by.
+
+    Returns:
+    str: A JSON string with the counts of each group.
+    """
+    with pyroscope.tag_wrapper({ "groupby": "_".join(groupby_terms)}):
+        result = df.groupby(groupby_terms).size().reset_index(name='Count')
+        result_json = result.to_json(orient='records')
+        return result_json

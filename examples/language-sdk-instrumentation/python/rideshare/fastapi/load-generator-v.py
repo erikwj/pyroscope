@@ -22,17 +22,16 @@ if __name__ == "__main__":
     time.sleep(3)
     while True:
         host = HOSTS[random.randint(0, len(HOSTS) - 1)]
+        groupby=groupby_terms_one
+        isBig=True
 
         if host == HOSTS[0]:
             groupby=groupby_terms_all
-        else: 
-            groupby=groupby_terms_one
-        
+                
         # when default is set to True, the difference between the queryparameters is more significant
         if host == HOSTS[2]:
-            isBig=True
-        else: 
             isBig=False
+       
 
         params = {
             "isBig": isBig,

@@ -51,7 +51,8 @@ def group_and_count(df: pd.DataFrame, groupby_terms: list[str]) -> str:
     Returns:
     str: A JSON string with the counts of each group.
     """
-    with pyroscope.tag_wrapper({ "groupby": "_".join(groupby_terms)}):
+    tag = "_".join(groupby_terms)
+    with pyroscope.tag_wrapper({ "groupby": tag}):
         result = df.groupby(groupby_terms).size().reset_index(name='Count')
         result_json = result.to_json(orient='records')
         return result_json
